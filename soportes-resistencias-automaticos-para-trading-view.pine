@@ -1,0 +1,64 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © Lotus Trading Academy - David Cánovas | Web oficial: https://expertosentrading.com
+// Desarrollado para la comunidad de inversores y alumnos de nuestra academia de trading.
+
+//@version=5
+indicator("Zonas S/R Lotus Trading Academy", overlay=true, max_lines_count=500)
+
+// ==========================================
+// SECCIÓN 1: PIVOTES (Soportes y Resistencias dinámicos)
+// ==========================================
+group_pivots = "Ajustes de Pivotes (Líneas Azules)"
+pivot_length = input.int(20, "Fuerza del Pivote", minval=1, group=group_pivots, tooltip="Velas a los lados para confirmar un nivel estructural.")
+num_p_levels = input.int(5, "Cantidad de niveles", minval=1, group=group_pivots, tooltip="Número de soportes y resistencias recientes a mostrar.")
+p_line_color = input.color(color.blue, "Color Pivotes", group=group_pivots)
+
+var line[] high_lines = array.new_line()
+var line[] low_lines  = array.new_line()
+
+ph = ta.pivothigh(high, pivot_length, pivot_length)
+pl = ta.pivotlow(low, pivot_length, pivot_length)
+
+if not na(ph)
+    new_line = line.new(bar_index[pivot_length], ph, bar_index, ph, color=p_line_color, width=1, extend=extend.right)
+    array.push(high_lines, new_line)
+    if array.size(high_lines) > num_p_levels
+        line.delete(array.shift(high_lines))
+
+if not na(pl)
+    new_line = line.new(bar_index[pivot_length], pl, bar_index, pl, color=p_line_color, width=1, extend=extend.right)
+    array.push(low_lines, new_line)
+    if array.size(low_lines) > num_p_levels
+        line.delete(array.shift(low_lines))
+
+// ==========================================
+// SECCIÓN 2: NIVELES PSICOLÓGICOS (Números Redondos)
+// ==========================================
+group_round = "Niveles Psicológicos (Líneas Rojas)"
+show_round  = input.bool(true, "Mostrar Números Redondos", group=group_round)
+round_step  = input.float(1.0, "Paso del nivel (Intervalo)", minval=0.001, group=group_round, tooltip="Dibuja una línea cada X unidades (ej: 1 para acciones, 1000 para BTC).")
+round_color = input.color(color.new(color.red, 60), "Color Niveles", group=group_round)
+
+var line[] round_lines = array.new_line()
+
+// Solo calculamos y dibujamos en la última vela para optimizar el rendimiento
+if show_round and barstate.islast
+    // Limpiar líneas anteriores para refrescar la vista según el zoom
+    for l in round_lines
+        line.delete(l)
+    array.clear(round_lines)
+
+    // Detectamos el rango de precios visible (aproximado)
+    float top_price = high + (round_step * 5)
+    float bot_price = low - (round_step * 5)
+    
+    // Calculamos el primer nivel redondo por debajo del mínimo actual
+    float current_level = math.floor(bot_price / round_step) * round_step
+    
+    // Dibujamos hasta 20 niveles redondos en el entorno del precio actual
+    for i = 1 to 30
+        if current_level <= top_price
+            r_line = line.new(bar_index - 500, current_level, bar_index + 50, current_level, 
+                              color=round_color, width=1, style=line.style_solid, extend=extend.both)
+            array.push(round_lines, r_line)
+            current_level += round_step
