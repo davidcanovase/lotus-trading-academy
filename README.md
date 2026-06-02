@@ -10,7 +10,7 @@ Si deseas dar el salto profesional y dominar la lectura de los mercados financie
 
 *   🚀 **[Curso de Trading desde Cero](https://expertosentrading.com/curso-de-trading-desde-cero/)**: Formación de iniciación al trading profesional diseñada especialmente para principiantes.
 *   📈 **[Curso de Trading Avanzado](https://expertosentrading.com/curso-de-trading-avanzado/)**: Estrategias avanzadas y gestión de riesgo técnica para operadores con experiencia previa.
-*   🏆 **[Curso de Trading Profesional](https://expertosentrading.com/curso-de-trading-profesional/)**: Mentoría de élite y acceso completo al campus virtual para dominar los mercados.
+*   🏆 **[Curso de Trading Profesional](https://expertosentrading.com/curso-de-trading-profesional/)**: Mentoría personalizada y acceso completo al campus virtual para dominar los mercados.
 
 ---
 © 2026 Lotus Trading Academy. Todos los derechos reservados.
